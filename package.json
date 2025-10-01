@@ -12,6 +12,7 @@
     "docs:serve": "mkdocs serve",
     "release": "changeset publish",
     "release:version": "changeset version",
+    "build": "echo 'No build step required for template'",
     "lint": "echo 'Add your linting commands here'",
     "format": "echo 'Add your formatting commands here'",
     "test": "echo 'Add your test commands here'"
@@ -47,10 +48,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/vibecoding-productivity.git"
+    "url": "git+https://github.com/gnarzadigital/vibecoding-productivity.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/vibecoding-productivity/issues"
+    "url": "https://github.com/gnarzadigital/vibecoding-productivity/issues"
   },
-  "homepage": "https://github.com/yourusername/vibecoding-productivity#readme"
+  "homepage": "https://github.com/gnarzadigital/vibecoding-productivity#readme"
 }
