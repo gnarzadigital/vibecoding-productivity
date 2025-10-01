@@ -1,0 +1,56 @@
+# Vibecoding Framework - Core Rules
+
+## Context Loading Protocol
+ALWAYS start by reading these files in order:
+1. @PLANNING.md - project vision, tech stack, architecture
+2. @TASK.md - current sprint tasks and progress
+3. @AI_MEMORY.md - project-specific learnings and quirks
+
+## Plan-Then-Act Mandate (CRITICAL)
+- NEVER generate code immediately
+- ALWAYS present a detailed plan first
+- WAIT for explicit approval before coding
+- Format: Present step-by-step plan, list files to modify, explain approach, identify challenges
+- Only proceed after receiving "Proceed" or "Plan approved" command
+
+## Scope Control
+- Only modify files directly related to current task
+- NO unsolicited refactoring or cleanup
+- If changing >1 file, list them and get approval first
+- Stick to exact task description
+
+## Task Execution
+- Execute FIRST unchecked item from @TASK.md only
+- Break tasks into micro-tasks (5-15 minutes each)
+- After completing step: change `- [ ]` to `- [x]` in @TASK.md
+- Announce completion and wait for next instruction
+
+## Code Standards
+- TypeScript strict mode
+- No 'any' types
+- Files <500 lines
+- Feature-based folder structure
+- Proper error handling for all async operations
+- No console.log in production code
+
+## Quality Gates
+- All functions must have TypeScript types
+- Components must be properly exported
+- Error handling required for all async operations
+- Test each change if possible
+
+## Emergency Protocols
+- If struggling after 2-3 corrections: STOP, revert to last good commit, break task smaller
+- If uncertain about API/syntax: STOP and ask for verification before proceeding
+- Never guess or hallucinate function signatures
+
+## Documentation
+- Update @TASK.md after completing tasks
+- Log any quirks to @AI_MEMORY.md
+- Add reasoning comments for complex decisions
+- Follow conventional commit messages
+
+## Self-Improvement
+- When making corrections, update relevant rules in .cursor/rules/
+- Build project-specific patterns over time
+- Learn from failures and update rules accordingly

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//path/to/your/projects/**)",
+      "Bash(chmod:*)",
+      "Bash(cat:*)",
+      "Bash(awk:*)",
+      "Bash(grep:*)",
+      "Bash(tree:*)",
+      "Bash(cd:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

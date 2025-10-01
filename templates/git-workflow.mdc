@@ -1,0 +1,211 @@
+---
+description: Git workflow and commit standards
+---
+
+# Git Workflow Standards
+
+## Branch Naming Convention
+- `feature/description` - New features
+- `bugfix/description` - Bug fixes
+- `hotfix/description` - Critical fixes
+- `refactor/description` - Code refactoring
+- `docs/description` - Documentation updates
+
+## Commit Message Format
+Follow [Conventional Commits](https://www.conventionalcommits.org/) specification:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Types
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks
+
+### Examples
+```bash
+feat(auth): add JWT token validation
+fix(api): resolve user creation error
+docs(readme): update installation instructions
+style(components): format button component
+refactor(services): extract user service logic
+test(auth): add login validation tests
+chore(deps): update dependencies
+```
+
+## Micro-Commit Strategy
+- Commit after each successful micro-task
+- Keep commits small and focused
+- Each commit should be deployable
+- Use descriptive commit messages
+
+## Branch Workflow
+```bash
+# Start new feature
+git checkout -b feature/user-authentication
+
+# Make changes and commit
+git add .
+git commit -m "feat(auth): add login form component"
+
+# Continue with micro-commits
+git add .
+git commit -m "feat(auth): add form validation"
+
+# Push to remote
+git push origin feature/user-authentication
+
+# Create pull request
+# After review and merge, delete branch
+git checkout main
+git pull origin main
+git branch -d feature/user-authentication
+```
+
+## Pre-commit Hooks
+```json
+// package.json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{json,md}": ["prettier --write"]
+  }
+}
+```
+
+## Commit Message Validation
+```javascript
+// commitlint.config.js
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [
+      2,
+      'always',
+      [
+        'feat',
+        'fix',
+        'docs',
+        'style',
+        'refactor',
+        'test',
+        'chore',
+        'perf',
+        'ci',
+        'build',
+        'revert'
+      ]
+    ],
+    'subject-case': [2, 'never', ['pascal-case', 'upper-case']],
+    'subject-max-length': [2, 'always', 50],
+    'body-max-line-length': [2, 'always', 72]
+  }
+};
+```
+
+## Release Workflow
+```bash
+# Create release branch
+git checkout -b release/v1.2.0
+
+# Update version in package.json
+npm version patch
+
+# Update CHANGELOG.md
+# Commit changes
+git add .
+git commit -m "chore(release): bump version to 1.2.0"
+
+# Push release branch
+git push origin release/v1.2.0
+
+# Create pull request to main
+# After merge, tag release
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+## Emergency Revert
+```bash
+# Revert to last good commit
+git reset --hard HEAD~1
+
+# Force push (use with caution)
+git push --force-with-lease origin main
+
+# Or create revert commit
+git revert <commit-hash>
+git push origin main
+```
+
+## Code Review Standards
+- All changes must be reviewed
+- Use pull request templates
+- Include testing instructions
+- Document breaking changes
+- Update documentation
+
+## Pull Request Template
+```markdown
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation update
+
+## Testing
+- [ ] Unit tests pass
+- [ ] Integration tests pass
+- [ ] Manual testing completed
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] No breaking changes (or documented)
+```
+
+## Git Aliases
+```bash
+# Add to .gitconfig
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = !gitk
+    lg = log --oneline --decorate --all --graph
+    amend = commit --amend --no-edit
+    wip = commit -am "WIP"
+    unwip = reset HEAD~1
+```
+
+## Best Practices
+- Commit early and often
+- Write clear commit messages
+- Use atomic commits
+- Keep feature branches short-lived
+- Regularly sync with main branch
+- Use meaningful branch names
+- Document complex changes
+- Test before committing

@@ -1,0 +1,56 @@
+{
+  "name": "vibecoding-productivity",
+  "version": "1.0.0",
+  "description": "Vibecoding productivity framework with minimal automation stack",
+  "main": "index.js",
+  "scripts": {
+    "setup": "bash ./scripts/bootstrap.sh",
+    "bootstrap": "bash ./scripts/bootstrap.sh",
+    "precommit": "npx lefthook run pre-commit",
+    "commit": "npx czg",
+    "docs:build": "mkdocs build",
+    "docs:serve": "mkdocs serve",
+    "release": "changeset publish",
+    "release:version": "changeset version",
+    "lint": "echo 'Add your linting commands here'",
+    "format": "echo 'Add your formatting commands here'",
+    "test": "echo 'Add your test commands here'"
+  },
+  "keywords": [
+    "vibecoding",
+    "ai-development",
+    "productivity",
+    "automation",
+    "spec-driven-development"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "lefthook": "^1.6.0",
+    "@changesets/cli": "^2.27.1",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.0",
+    "czg": "^1.9.0",
+    "lint-staged": "^15.2.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/vibecoding-productivity.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/vibecoding-productivity/issues"
+  },
+  "homepage": "https://github.com/yourusername/vibecoding-productivity#readme"
+}

@@ -1,0 +1,91 @@
+site_name: Vibecoding Productivity Framework
+site_description: A comprehensive framework for AI-native development
+site_author: Your Name
+site_url: https://yourusername.github.io/vibecoding-productivity
+
+# Repository
+repo_name: yourusername/vibecoding-productivity
+repo_url: https://github.com/yourusername/vibecoding-productivity
+
+# Configuration
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+# Plugins
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+# Page tree
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Quick Start: getting-started/quick-start.md
+    - Installation: getting-started/installation.md
+  - Framework:
+    - Core Concepts: framework/core-concepts.md
+    - Workflow: framework/workflow.md
+  - Automation:
+    - Setup: automation/setup.md
+    - Git Hooks: automation/git-hooks.md
+    - CI/CD: automation/ci-cd.md
+  - Templates:
+    - Project Starter: templates/project-starter.md
+  - Reference:
+    - Framework Summary: reference/FRAMEWORK_SUMMARY.md
+    - Upgrade Guide: reference/UPGRADE_GUIDE.md
+    - Vibecoding Secrets: reference/vibecoding-secrets.md
+  - Contributing: contributing.md
+
+# Extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true

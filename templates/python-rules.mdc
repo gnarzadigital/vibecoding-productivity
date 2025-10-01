@@ -1,0 +1,178 @@
+---
+description: Python/FastAPI development rules
+---
+
+# Python/FastAPI Development Rules
+
+## Code Style Standards
+- Follow PEP 8 guidelines
+- Use type hints for all functions
+- Use dataclasses for data structures
+- Implement proper docstrings
+
+## FastAPI Patterns
+```python
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+from typing import List, Optional
+from datetime import datetime
+
+app = FastAPI(title="My API", version="1.0.0")
+
+# Pydantic models
+class UserCreate(BaseModel):
+    email: str
+    name: str
+    age: Optional[int] = None
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    name: str
+    created_at: datetime
+
+# Dependencies
+async def get_current_user() -> UserResponse:
+    # Authentication logic
+    pass
+
+# API endpoints
+@app.post("/users/", response_model=UserResponse)
+async def create_user(
+    user: UserCreate,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Create a new user."""
+    try:
+        # Business logic
+        return await user_service.create_user(user)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+```
+
+## Database Patterns
+```python
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = "users"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    name = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+# Repository pattern
+class UserRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    
+    async def create(self, user_data: UserCreate) -> User:
+        db_user = User(**user_data.dict())
+        self.db.add(db_user)
+        self.db.commit()
+        self.db.refresh(db_user)
+        return db_user
+```
+
+## Error Handling
+```python
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+
+class CustomException(Exception):
+    def __init__(self, message: str, status_code: int = 400):
+        self.message = message
+        self.status_code = status_code
+        super().__init__(self.message)
+
+@app.exception_handler(CustomException)
+async def custom_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.message}
+    )
+```
+
+## Testing Patterns
+```python
+import pytest
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+def test_create_user():
+    response = client.post(
+        "/users/",
+        json={"email": "test@example.com", "name": "Test User"}
+    )
+    assert response.status_code == 200
+    assert response.json()["email"] == "test@example.com"
+
+def test_get_user_not_found():
+    response = client.get("/users/999")
+    assert response.status_code == 404
+```
+
+## Async Patterns
+```python
+import asyncio
+from typing import List
+import httpx
+
+async def fetch_user_data(user_id: int) -> dict:
+    """Fetch user data from external API."""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"https://api.example.com/users/{user_id}")
+        return response.json()
+
+async def fetch_multiple_users(user_ids: List[int]) -> List[dict]:
+    """Fetch multiple users concurrently."""
+    tasks = [fetch_user_data(user_id) for user_id in user_ids]
+    return await asyncio.gather(*tasks)
+```
+
+## Configuration Management
+```python
+from pydantic import BaseSettings
+from typing import Optional
+
+class Settings(BaseSettings):
+    app_name: str = "My API"
+    debug: bool = False
+    database_url: str
+    secret_key: str
+    redis_url: Optional[str] = None
+    
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
+```
+
+## File Organization
+```
+app/
+├── main.py           # FastAPI app
+├── models/           # SQLAlchemy models
+├── schemas/          # Pydantic models
+├── api/              # API routes
+├── services/         # Business logic
+├── repositories/     # Data access layer
+├── utils/            # Utility functions
+├── tests/            # Test files
+└── config.py         # Configuration
+```
+
+## Common Patterns
+- Use dependency injection
+- Implement proper logging
+- Use environment variables for configuration
+- Follow RESTful API design
+- Implement proper validation
+- Use background tasks for heavy operations

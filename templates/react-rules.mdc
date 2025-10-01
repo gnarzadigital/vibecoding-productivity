@@ -1,0 +1,93 @@
+---
+description: React/Next.js specific development rules
+---
+
+# React/Next.js Development Rules
+
+## Component Standards
+- Use functional components with hooks
+- Prefer Server Components by default (Next.js 13+)
+- Use TypeScript interfaces for props
+- Implement proper error boundaries
+
+## Hook Patterns
+```typescript
+// Custom hook example
+const useUser = (id: string) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchUser(id)
+      .then(setUser)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  return { user, loading, error };
+};
+```
+
+## State Management
+- Use useState for local component state
+- Use useReducer for complex state logic
+- Use Zustand for global state (if needed)
+- Avoid prop drilling with context
+
+## Performance Optimization
+- Use React.memo for expensive components
+- Implement useMemo for expensive calculations
+- Use useCallback for stable function references
+- Lazy load components with React.lazy
+
+## Next.js Specific
+- Use App Router (Next.js 13+)
+- Implement proper loading.tsx and error.tsx
+- Use Server Actions for mutations
+- Optimize images with next/image
+
+## Styling Patterns
+- Use Tailwind CSS for utility-first styling
+- Implement responsive design patterns
+- Use CSS modules for component-specific styles
+- Follow design system conventions
+
+## Testing Patterns
+```typescript
+// Component test example
+import { render, screen, fireEvent } from '@testing-library/react';
+import { Button } from './Button';
+
+describe('Button Component', () => {
+  it('should render with correct text', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+
+  it('should call onClick when clicked', () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+    fireEvent.click(screen.getByText('Click me'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+## File Organization
+```
+src/
+├── components/     # Reusable UI components
+├── features/       # Feature-based modules
+├── hooks/         # Custom React hooks
+├── services/      # API and business logic
+├── utils/         # Utility functions
+├── types/         # TypeScript definitions
+└── styles/        # Global styles
+```
+
+## Common Patterns
+- Use compound components for complex UI
+- Implement render props for flexibility
+- Use higher-order components sparingly
+- Prefer composition over inheritance

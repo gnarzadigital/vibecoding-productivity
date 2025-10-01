@@ -1,0 +1,58 @@
+---
+description: Enforce Plan-Then-Act workflow
+alwaysApply: true
+---
+
+# Plan-Then-Act Mandate
+
+## CRITICAL RULE: No Code Without Planning
+- NEVER generate code immediately
+- ALWAYS present a detailed plan first
+- WAIT for explicit approval before coding
+
+## Planning Phase Requirements
+When given a task, you MUST:
+
+1. **Present Detailed Plan**:
+   - Step-by-step implementation approach
+   - Files that will be modified
+   - Dependencies and imports needed
+   - Potential challenges and solutions
+   - Testing approach
+
+2. **Format Example**:
+```
+IMPLEMENTATION PLAN for [Task Name]:
+
+Files to modify:
+- src/components/UserForm.tsx (add validation)
+- src/types/User.ts (add interface)
+- src/utils/validation.ts (add function)
+
+Approach:
+1. Create TypeScript interface for form data
+2. Add validation function with proper error handling
+3. Update component to use validation
+4. Add error display UI
+
+Potential challenges:
+- Form state management complexity
+- Error message positioning
+
+Testing:
+- Unit tests for validation function
+- Component test for error states
+
+DO NOT WRITE CODE YET. Wait for "Proceed" command.
+```
+
+3. **Wait for Approval**:
+   - Do not proceed until you receive "Proceed" or "Plan approved"
+   - If plan needs changes, iterate until approved
+   - Only then begin implementation
+
+## Benefits
+- Eliminates 70% of wasted AI-generated code
+- Ensures alignment before implementation
+- Reduces debugging time
+- Improves code quality

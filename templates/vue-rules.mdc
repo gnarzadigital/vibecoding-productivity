@@ -1,0 +1,166 @@
+---
+description: Vue.js 3 Composition API development rules
+---
+
+# Vue.js 3 Development Rules
+
+## Composition API Standards
+- Use Composition API by default
+- Use `<script setup>` syntax
+- Implement proper TypeScript support
+- Use reactive() and ref() appropriately
+
+## Component Structure
+```vue
+<template>
+  <div class="component-name">
+    <!-- Template content -->
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import type { ComponentProps } from './types'
+
+// Props
+interface Props {
+  title: string
+  count?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  count: 0
+})
+
+// Emits
+const emit = defineEmits<{
+  update: [value: string]
+  delete: [id: string]
+}>()
+
+// Reactive state
+const isLoading = ref(false)
+const error = ref<string | null>(null)
+
+// Computed properties
+const displayTitle = computed(() => 
+  props.title.toUpperCase()
+)
+
+// Methods
+const handleClick = () => {
+  emit('update', 'new value')
+}
+
+// Lifecycle
+onMounted(() => {
+  // Component mounted logic
+})
+</script>
+
+<style scoped>
+.component-name {
+  /* Component styles */
+}
+</style>
+```
+
+## State Management
+- Use Pinia for global state
+- Use provide/inject for component communication
+- Implement proper state persistence
+- Use stores for business logic
+
+## Composables Pattern
+```typescript
+// useUser.ts
+import { ref, computed } from 'vue'
+import type { User } from '@/types'
+
+export const useUser = () => {
+  const user = ref<User | null>(null)
+  const loading = ref(false)
+  const error = ref<string | null>(null)
+
+  const isAuthenticated = computed(() => !!user.value)
+
+  const fetchUser = async (id: string) => {
+    loading.value = true
+    try {
+      user.value = await userService.getUser(id)
+    } catch (err) {
+      error.value = err.message
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {
+    user: readonly(user),
+    loading: readonly(loading),
+    error: readonly(error),
+    isAuthenticated,
+    fetchUser
+  }
+}
+```
+
+## Routing Patterns
+- Use Vue Router 4
+- Implement route guards
+- Use lazy loading for routes
+- Handle route parameters properly
+
+## Styling Standards
+- Use scoped styles by default
+- Implement CSS custom properties
+- Use Tailwind CSS for utilities
+- Follow BEM methodology for complex styles
+
+## Testing Patterns
+```typescript
+// Component test example
+import { mount } from '@vue/test-utils'
+import { describe, it, expect } from 'vitest'
+import Button from './Button.vue'
+
+describe('Button Component', () => {
+  it('should render with correct text', () => {
+    const wrapper = mount(Button, {
+      props: { text: 'Click me' }
+    })
+    expect(wrapper.text()).toBe('Click me')
+  })
+
+  it('should emit click event', async () => {
+    const wrapper = mount(Button)
+    await wrapper.trigger('click')
+    expect(wrapper.emitted('click')).toBeTruthy()
+  })
+})
+```
+
+## Performance Optimization
+- Use v-memo for expensive renders
+- Implement proper key attributes
+- Use keep-alive for component caching
+- Lazy load components with defineAsyncComponent
+
+## File Organization
+```
+src/
+├── components/     # Reusable UI components
+├── views/         # Page components
+├── composables/   # Composition functions
+├── stores/        # Pinia stores
+├── services/      # API services
+├── utils/         # Utility functions
+├── types/         # TypeScript definitions
+└── assets/        # Static assets
+```
+
+## Common Patterns
+- Use provide/inject for dependency injection
+- Implement proper error handling
+- Use teleport for modals
+- Follow single responsibility principle

@@ -1,0 +1,326 @@
+---
+description: Deployment and CI/CD standards
+---
+
+# Deployment Standards
+
+## Environment Configuration
+```bash
+# .env.example
+NODE_ENV=development
+PORT=3000
+DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+JWT_SECRET=your-secret-key
+REDIS_URL=redis://localhost:6379
+```
+
+## Docker Configuration
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY . .
+
+# Build application
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["npm", "start"]
+```
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:password@db:5432/app
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
+```
+
+## CI/CD Pipeline
+```yaml
+# .github/workflows/ci.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm test
+    
+    - name: Run linting
+      run: npm run lint
+    
+    - name: Run type checking
+      run: npm run type-check
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build application
+      run: npm run build
+    
+    - name: Build Docker image
+      run: docker build -t myapp:${{ github.sha }} .
+    
+    - name: Push to registry
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker push myapp:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to production
+      run: |
+        # Deployment commands
+        echo "Deploying to production..."
+```
+
+## Health Checks
+```javascript
+// health.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/health', async (req, res) => {
+  try {
+    // Check database connection
+    await db.authenticate();
+    
+    // Check Redis connection
+    await redis.ping();
+    
+    res.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: process.memoryUsage(),
+      version: process.env.npm_package_version
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'unhealthy',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+module.exports = router;
+```
+
+## Monitoring Setup
+```javascript
+// monitoring.js
+const prometheus = require('prom-client');
+
+// Create metrics
+const httpRequestDuration = new prometheus.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+const httpRequestTotal = new prometheus.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+// Middleware to collect metrics
+const metricsMiddleware = (req, res, next) => {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = (Date.now() - start) / 1000;
+    const labels = {
+      method: req.method,
+      route: req.route?.path || req.path,
+      status_code: res.statusCode
+    };
+    
+    httpRequestDuration.observe(labels, duration);
+    httpRequestTotal.inc(labels);
+  });
+  
+  next();
+};
+
+module.exports = { metricsMiddleware, prometheus };
+```
+
+## Security Headers
+```javascript
+// security.js
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+
+const securityMiddleware = [
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "https:"]
+      }
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    }
+  }),
+  
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP'
+  })
+];
+
+module.exports = securityMiddleware;
+```
+
+## Environment-Specific Configs
+```javascript
+// config/index.js
+const config = {
+  development: {
+    database: {
+      host: 'localhost',
+      port: 5432,
+      name: 'app_dev'
+    },
+    redis: {
+      host: 'localhost',
+      port: 6379
+    },
+    logging: 'debug'
+  },
+  
+  production: {
+    database: {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      name: process.env.DB_NAME
+    },
+    redis: {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT
+    },
+    logging: 'info'
+  }
+};
+
+module.exports = config[process.env.NODE_ENV || 'development'];
+```
+
+## Deployment Checklist
+- [ ] Environment variables configured
+- [ ] Database migrations run
+- [ ] Health checks passing
+- [ ] SSL certificates valid
+- [ ] Monitoring configured
+- [ ] Logging configured
+- [ ] Backup strategy in place
+- [ ] Rollback plan ready
+- [ ] Performance testing completed
+- [ ] Security scan passed
+
+## Rollback Strategy
+```bash
+# Quick rollback
+docker-compose down
+docker-compose up -d --scale app=0
+docker-compose up -d app:previous-version
+
+# Database rollback
+npm run migrate:rollback
+
+# Full system rollback
+git checkout previous-stable-tag
+docker-compose up -d
+```
+
+## Best Practices
+- Use infrastructure as code
+- Implement blue-green deployments
+- Set up proper monitoring
+- Use secrets management
+- Implement proper logging
+- Regular security updates
+- Automated testing
+- Performance monitoring

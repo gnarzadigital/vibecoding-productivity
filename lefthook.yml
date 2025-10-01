@@ -1,0 +1,31 @@
+# Lefthook configuration for Vibecoding Minimal Stack
+# Fast, parallel Git hooks
+
+pre-commit:
+  parallel: true
+  commands:
+    lint-staged:
+      run: npx lint-staged
+      glob: "*.{js,ts,tsx,jsx,json,md,yml,yaml}"
+    
+    commitlint:
+      run: npx commitlint --edit $1
+      glob: "*.{js,ts,tsx,jsx,json,md,yml,yaml}"
+      stage_fixed: true
+
+pre-push:
+  parallel: true
+  commands:
+    test:
+      run: npm test
+      fail_text: "Tests failed. Please fix before pushing."
+    
+    build:
+      run: npm run build
+      fail_text: "Build failed. Please fix before pushing."
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit $1
+      fail_text: "Commit message does not follow conventional commits format."
