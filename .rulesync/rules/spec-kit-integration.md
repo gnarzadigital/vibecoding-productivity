@@ -1,7 +1,15 @@
 ---
-alwaysApply: true
+targets:
+  - '*'
+root: false
 description: Spec Kit integration and bootstrap enforcement
-globs: **/*
+globs:
+  - '**/*'
+cursor:
+  alwaysApply: true
+  description: Spec Kit integration and bootstrap enforcement
+  globs:
+    - '**/*'
 ---
 
 # Spec Kit Integration & Setup Enforcement
@@ -11,6 +19,7 @@ globs: **/*
 When this project is cloned for the first time:
 
 1. **Remind user to run setup**:
+
    ```bash
    npm run setup
    # or
@@ -35,12 +44,14 @@ If user has initialized Spec Kit, these commands are available:
 **Spec Kit complements Plan-Then-Act workflow**:
 
 ### Without Spec Kit (standard)
+
 1. User requests feature
 2. AI presents detailed plan (no code)
 3. User approves with "Proceed"
 4. AI implements
 
 ### With Spec Kit (enhanced)
+
 1. User runs: `specify plan <feature>`
 2. Spec Kit generates spec file in `specs/`
 3. AI reads spec and presents implementation plan
@@ -68,6 +79,7 @@ When opening this project, ensure:
 ## Bootstrap Reminder
 
 **If user mentions setup issues, remind them**:
+
 ```bash
 npm run setup    # Full bootstrap
 npx czg          # Interactive commits
@@ -84,9 +96,11 @@ npm run release  # Publish changesets
 ## Integration with Existing Rules
 
 This rule works alongside:
+
 - `planning-first.mdc` - Plan-Then-Act enforcement
 - `task-execution.mdc` - Sequential task workflow
 - `scope-control.mdc` - Prevent scope creep
 - `automation.mdc` - Git hooks and automation
 
-**Priority order**: Context loading → Planning → Spec (if available) → Implementation
+**Priority order**: Context loading → Planning → Spec (if available) →
+Implementation

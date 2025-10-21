@@ -103,11 +103,33 @@ if [ -f "mkdocs.yml" ]; then
     fi
 fi
 
+# Generate AI configurations for all tools
+echo -e "${BLUE}🤖 Generating AI configurations...${NC}"
+if [ -f "rulesync.jsonc" ] || [ -d ".rulesync" ]; then
+    npm run ai:sync
+    echo -e "${GREEN}✅ AI configs generated for all tools:${NC}"
+    echo -e "  ${GREEN}✓${NC} Cursor IDE (.cursor/rules/)"
+    echo -e "  ${GREEN}✓${NC} Claude Code (CLAUDE.md, .claude/)"
+    echo -e "  ${GREEN}✓${NC} GitHub Copilot (.github/instructions/)"
+    echo -e "  ${GREEN}✓${NC} Cline (.clinerules/)"
+    echo -e "  ${GREEN}✓${NC} Roo Code (.roo/rules/)"
+    echo -e "  ${GREEN}✓${NC} Codex CLI (AGENTS.md, .codex/)"
+    echo -e "  ${GREEN}✓${NC} Gemini (GEMINI.md, .gemini/)"
+else
+    echo -e "${YELLOW}⚠️  No rulesync config found, skipping AI config generation${NC}"
+fi
+
 echo -e "${GREEN}🎉 Bootstrap complete!${NC}"
 echo -e "${BLUE}📋 Next steps:${NC}"
 echo -e "  1. Run 'npx czg' for commit messages"
 echo -e "  2. Run 'npm run docs:build' to build documentation"
 echo -e "  3. Run 'npm run release' to create releases"
-echo -e "  4. Check .cursor/rules/ for AI behavior configuration"
+echo -e "  4. Edit rules in .rulesync/rules/ (source of truth)"
+echo -e "  5. Run 'npm run ai:sync' to regenerate AI configs"
+echo ""
+echo -e "${BLUE}💡 AI Configuration:${NC}"
+echo -e "  • Edit: ${YELLOW}.rulesync/rules/${NC} (master rules)"
+echo -e "  • Sync: ${YELLOW}npm run ai:sync${NC} (regenerate all)"
+echo -e "  • Help: ${YELLOW}npm run ai:help${NC} (rulesync docs)"
 echo ""
 echo -e "${GREEN}Happy vibecoding! 🚀${NC}"

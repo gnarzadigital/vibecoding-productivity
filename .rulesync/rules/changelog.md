@@ -1,10 +1,17 @@
 ---
+targets:
+  - '*'
+root: false
 description: Changelog automation and maintenance
+globs: []
+cursor:
+  description: Changelog automation and maintenance
 ---
 
 # Changelog Automation Rules
 
 ## Auto-Update Protocol
+
 After every code change, automatically update CHANGELOG.md:
 
 1. **Add entry to [Unreleased] section**
@@ -13,6 +20,7 @@ After every code change, automatically update CHANGELOG.md:
 4. **Include date and reference**
 
 ## Entry Categories
+
 - **Added**: New features, components, or functionality
 - **Changed**: Changes to existing functionality
 - **Deprecated**: Features marked for removal
@@ -21,36 +29,45 @@ After every code change, automatically update CHANGELOG.md:
 - **Security**: Security improvements and fixes
 
 ## Entry Format
+
 ```markdown
 ### [Category]
+
 - [ ] [Description] ([PR/Issue reference])
 ```
 
 ## Examples
+
 ```markdown
 ### Added
+
 - [ ] User authentication with JWT tokens (#123)
 - [ ] Email validation for signup form (#124)
 
 ### Changed
+
 - [ ] Updated button component styling (#125)
 - [ ] Improved error handling in API calls (#126)
 
 ### Fixed
+
 - [ ] Resolved memory leak in user session (#127)
 - [ ] Fixed form validation edge case (#128)
 
 ### Security
+
 - [ ] Added input sanitization for user data (#129)
 - [ ] Implemented CSRF protection (#130)
 ```
 
 ## Version Management
+
 - **Unreleased**: Current development changes
 - **Major.Minor.Patch**: Released versions
 - **Date format**: YYYY-MM-DD
 
 ## Automation Triggers
+
 - Code commits with conventional commit messages
 - Pull request merges
 - Feature completions
@@ -58,6 +75,7 @@ After every code change, automatically update CHANGELOG.md:
 - Security updates
 
 ## Quality Checks
+
 - All entries must have descriptions
 - Reference PR/Issue numbers when available
 - Use consistent formatting

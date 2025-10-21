@@ -1,16 +1,27 @@
 ---
-alwaysApply: true
+targets:
+  - '*'
+root: false
 description: Core project rules and context loading
-globs: **/*
+globs:
+  - '**/*'
+cursor:
+  alwaysApply: true
+  description: Core project rules and context loading
+  globs:
+    - '**/*'
 ---
 
 # Context Loading Protocol
+
 ALWAYS start by reading these files in order:
+
 1. @PLANNING.md - project vision, tech stack, architecture
 2. @TASK.md - current sprint tasks and progress
 3. @AI_MEMORY.md - project-specific learnings and quirks
 
 # Code Standards
+
 - TypeScript strict mode enabled
 - No 'any' types allowed
 - Files must be <500 lines
@@ -19,6 +30,7 @@ ALWAYS start by reading these files in order:
 - Follow project naming conventions
 
 # File Organization
+
 - Components in `/components/`
 - Features in `/features/`
 - Utilities in `/utils/`
@@ -26,12 +38,14 @@ ALWAYS start by reading these files in order:
 - Services in `/services/`
 
 # Quality Gates
+
 - All functions must have TypeScript types
 - Components must be properly exported
 - Error handling required for all async operations
 - No console.log in production code
 
 # Documentation Requirements
+
 - Complex functions need JSDoc comments
 - API endpoints need OpenAPI documentation
 - Component props need TypeScript interfaces

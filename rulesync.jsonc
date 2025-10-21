@@ -1,0 +1,27 @@
+{
+  // AI Tools supported by this project
+  "targets": [
+    "copilot",      // GitHub Copilot
+    "cursor",       // Cursor IDE
+    "claudecode",   // Claude Code
+    "codexcli",     // Codex CLI (OpenAI)
+    "cline",        // Cline (VS Code extension)
+    "roo",          // Roo Code
+    "gemini"        // Gemini CLI
+  ],
+  "features": [
+    "rules",        // AI behavior rules
+    "ignore",       // .gitignore-like patterns
+    "mcp",          // Model Context Protocol configs
+    "commands",     // Slash commands
+    "subagents"     // Agent configurations
+  ],
+  "baseDirs": [
+    "."
+  ],
+  "delete": true,              // Delete existing generated files before regenerating
+  "verbose": true,             // Show detailed output during generation
+  "global": false,             // Project-level config (not user-global)
+  "simulatedCommands": false,  // Don't simulate commands in tools that don't support them
+  "simulatedSubagents": false  // Don't simulate subagents in tools that don't support them
+}

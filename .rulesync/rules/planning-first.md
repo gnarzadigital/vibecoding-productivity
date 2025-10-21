@@ -1,20 +1,31 @@
 ---
-alwaysApply: true
+targets:
+  - '*'
+root: false
 description: Enforce Plan-Then-Act workflow
-globs: **/*
+globs:
+  - '**/*'
+cursor:
+  alwaysApply: true
+  description: Enforce Plan-Then-Act workflow
+  globs:
+    - '**/*'
 ---
 
 # Plan-Then-Act Mandate
 
 ## CRITICAL RULE: No Code Without Planning
+
 - NEVER generate code immediately
 - ALWAYS present a detailed plan first
 - WAIT for explicit approval before coding
 
 ## Planning Phase Requirements
+
 When given a task, you MUST:
 
 1. **Present Detailed Plan**:
+
    - Step-by-step implementation approach
    - Files that will be modified
    - Dependencies and imports needed
@@ -22,6 +33,7 @@ When given a task, you MUST:
    - Testing approach
 
 2. **Format Example**:
+
 ```
 IMPLEMENTATION PLAN for [Task Name]:
 
@@ -53,6 +65,7 @@ DO NOT WRITE CODE YET. Wait for "Proceed" command.
    - Only then begin implementation
 
 ## Benefits
+
 - Eliminates 70% of wasted AI-generated code
 - Ensures alignment before implementation
 - Reduces debugging time

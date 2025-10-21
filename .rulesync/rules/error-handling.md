@@ -1,16 +1,24 @@
 ---
+targets:
+  - '*'
+root: false
 description: Error handling patterns and standards
+globs: []
+cursor:
+  description: Error handling patterns and standards
 ---
 
 # Error Handling Standards
 
 ## General Principles
+
 - All async operations must have error handling
 - User-friendly error messages
 - Proper error logging for debugging
 - Graceful degradation when possible
 
 ## Error Types to Handle
+
 - Network/API failures
 - Validation errors
 - Authentication errors
@@ -20,51 +28,57 @@ description: Error handling patterns and standards
 ## Implementation Patterns
 
 ### API Error Handling
+
 ```typescript
 try {
-  const response = await fetch('/api/data');
+  const response = await fetch('/api/data')
   if (!response.ok) {
-    throw new Error(`API Error: ${response.status}`);
+    throw new Error(`API Error: ${response.status}`)
   }
-  return await response.json();
+  return await response.json()
 } catch (error) {
-  console.error('API call failed:', error);
-  throw new Error('Failed to fetch data. Please try again.');
+  console.error('API call failed:', error)
+  throw new Error('Failed to fetch data. Please try again.')
 }
 ```
 
 ### Form Validation Errors
+
 ```typescript
 const validateEmail = (email: string): string | null => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
-    return 'Please enter a valid email address';
+    return 'Please enter a valid email address'
   }
-  return null;
-};
+  return null
+}
 ```
 
 ### Component Error Boundaries
+
 ```typescript
 // For React components
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   // Implementation with fallback UI
-};
+}
 ```
 
 ## Error Message Guidelines
+
 - Be specific about what went wrong
 - Provide actionable next steps
 - Avoid technical jargon for user-facing messages
 - Include error codes for support
 
 ## Logging Standards
+
 - Use structured logging
 - Include context (user ID, timestamp, action)
 - Different log levels (error, warn, info, debug)
 - No sensitive data in logs
 
 ## Recovery Strategies
+
 - Retry mechanisms for transient failures
 - Fallback data when possible
 - Clear user guidance for resolution

@@ -4,10 +4,16 @@
 pre-commit:
   parallel: true
   commands:
+    # Auto-sync AI rules when .rulesync/ changes
+    ai-sync:
+      glob: ".rulesync/**/*.md"
+      run: npm run ai:sync
+      stage_fixed: true
+
     lint-staged:
       run: npx lint-staged
       glob: "*.{js,ts,tsx,jsx,json,md,yml,yaml}"
-    
+
     commitlint:
       run: npx commitlint --edit $1
       glob: "*.{js,ts,tsx,jsx,json,md,yml,yaml}"
@@ -19,7 +25,7 @@ pre-push:
     test:
       run: npm test
       fail_text: "Tests failed. Please fix before pushing."
-    
+
     build:
       run: npm run build
       fail_text: "Build failed. Please fix before pushing."

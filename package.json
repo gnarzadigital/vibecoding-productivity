@@ -12,6 +12,11 @@
     "docs:serve": "mkdocs serve",
     "release": "changeset publish",
     "release:version": "changeset version",
+    "ai:sync": "npx rulesync generate",
+    "ai:import": "npx rulesync import",
+    "ai:init": "npx rulesync init",
+    "ai:gitignore": "npx rulesync gitignore",
+    "ai:help": "npx rulesync --help",
     "build": "echo 'No build step required for template'",
     "lint": "echo 'Add your linting commands here'",
     "format": "echo 'Add your formatting commands here'",
@@ -27,12 +32,13 @@
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
-    "lefthook": "^1.6.0",
     "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.0",
     "czg": "^1.9.0",
-    "lint-staged": "^15.2.0"
+    "lefthook": "^1.6.0",
+    "lint-staged": "^15.2.0",
+    "rulesync": "^3.10.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx,jsx}": [

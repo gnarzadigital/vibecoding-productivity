@@ -1,67 +1,76 @@
 ---
+targets:
+  - '*'
+root: false
 description: Testing standards and patterns
+globs: []
+cursor:
+  description: Testing standards and patterns
 ---
 
 # Testing Standards
 
 ## Test Structure
+
 - Unit tests for utility functions
 - Component tests for UI components
 - Integration tests for API endpoints
 - E2E tests for critical user flows
 
 ## Unit Test Patterns
+
 ```typescript
 // Utility function test
 describe('calculateTotal', () => {
   it('should return correct total for valid items', () => {
     const items = [
       { price: 10, quantity: 2 },
-      { price: 5, quantity: 1 }
-    ];
-    expect(calculateTotal(items)).toBe(25);
-  });
+      { price: 5, quantity: 1 },
+    ]
+    expect(calculateTotal(items)).toBe(25)
+  })
 
   it('should return 0 for empty array', () => {
-    expect(calculateTotal([])).toBe(0);
-  });
-});
+    expect(calculateTotal([])).toBe(0)
+  })
+})
 ```
 
 ## Component Test Patterns
+
 ```typescript
 // React component test
 describe('Button Component', () => {
   it('should render children correctly', () => {
-    render(<Button>Click me</Button>);
-    expect(screen.getByText('Click me')).toBeInTheDocument();
-  });
+    render(<Button>Click me</Button>)
+    expect(screen.getByText('Click me')).toBeInTheDocument()
+  })
 
   it('should call onClick when clicked', () => {
-    const handleClick = jest.fn();
-    render(<Button onClick={handleClick}>Click me</Button>);
-    fireEvent.click(screen.getByText('Click me'));
-    expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-});
+    const handleClick = jest.fn()
+    render(<Button onClick={handleClick}>Click me</Button>)
+    fireEvent.click(screen.getByText('Click me'))
+    expect(handleClick).toHaveBeenCalledTimes(1)
+  })
+})
 ```
 
 ## API Test Patterns
+
 ```typescript
 // API endpoint test
 describe('GET /api/users', () => {
   it('should return users list', async () => {
-    const response = await request(app)
-      .get('/api/users')
-      .expect(200);
-    
-    expect(response.body).toHaveProperty('data');
-    expect(Array.isArray(response.body.data)).toBe(true);
-  });
-});
+    const response = await request(app).get('/api/users').expect(200)
+
+    expect(response.body).toHaveProperty('data')
+    expect(Array.isArray(response.body.data)).toBe(true)
+  })
+})
 ```
 
 ## Test Data Management
+
 ```typescript
 // Test data factories
 const createUser = (overrides: Partial<User> = {}): User => ({
@@ -70,33 +79,36 @@ const createUser = (overrides: Partial<User> = {}): User => ({
   name: 'Test User',
   createdAt: new Date(),
   updatedAt: new Date(),
-  ...overrides
-});
+  ...overrides,
+})
 ```
 
 ## Mock Patterns
+
 ```typescript
 // API mocking
 jest.mock('../services/api', () => ({
   fetchUsers: jest.fn(),
   createUser: jest.fn(),
-}));
+}))
 
 // Component mocking
 jest.mock('../components/UserCard', () => {
   return function MockUserCard({ user }: { user: User }) {
-    return <div data-testid="user-card">{user.name}</div>;
-  };
-});
+    return <div data-testid="user-card">{user.name}</div>
+  }
+})
 ```
 
 ## Test Coverage Requirements
+
 - Minimum 80% code coverage
 - 100% coverage for critical business logic
 - All public functions must have tests
 - All error paths must be tested
 
 ## Test Organization
+
 ```
 tests/
 ├── unit/           # Unit tests

@@ -1,17 +1,26 @@
 ---
+targets:
+  - '*'
+root: false
 description: Prevent AI hallucination and ensure accuracy
+globs: []
+cursor:
+  description: Prevent AI hallucination and ensure accuracy
 ---
 
 # No-Hallucination Protocol
 
 ## Critical Rule: Verify Before Proceeding
+
 If you're uncertain about any API, syntax, or implementation detail:
+
 1. **STOP immediately**
 2. **Ask for verification** before proceeding
 3. **Never guess or hallucinate** function signatures
 4. **Wait for confirmation** before implementing
 
 ## Verification Triggers
+
 - Unfamiliar API endpoints
 - New library syntax
 - Framework-specific patterns
@@ -20,6 +29,7 @@ If you're uncertain about any API, syntax, or implementation detail:
 - File system operations
 
 ## Example Interactions
+
 ```
 ❌ WRONG: "I'll use the fetchUser() method from the API"
 ✅ CORRECT: "I need to verify the exact API endpoint and method name. What's the correct way to fetch user data from your API?"
@@ -32,6 +42,7 @@ If you're uncertain about any API, syntax, or implementation detail:
 ```
 
 ## Verification Request Format
+
 ```
 VERIFICATION NEEDED:
 I'm uncertain about [specific detail] and want to avoid
@@ -45,6 +56,7 @@ I'll wait for your confirmation before proceeding.
 ```
 
 ## Benefits
+
 - Prevents incorrect implementations
 - Reduces debugging time
 - Builds trust in AI assistance
@@ -52,10 +64,12 @@ I'll wait for your confirmation before proceeding.
 - Maintains project standards
 
 ## When to Ask vs Research
+
 - **Ask**: Project-specific patterns, custom APIs, team conventions
 - **Research**: Standard library functions, common patterns, documentation
 
 ## Quality Assurance
+
 - Always verify before implementing
 - Document any assumptions made
 - Include error handling for uncertain cases
